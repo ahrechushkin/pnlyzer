@@ -6,13 +6,24 @@ import (
 	"time"
 )
 
-// User represents a user in the system.
 type User struct {
 	gorm.Model
 	Username       string `json:"username"`
 	Email          string `json:"email"`
 	PasswordDigest string `json:"password_digest"`
 	LastLogin      string `json:"last_login"`
+}
+
+type UserCreds struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type UserForm struct {
+	gorm.Model
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type UserRepositoryGorm struct {
@@ -40,7 +51,6 @@ func (r *UserRepositoryGorm) CreateUser(user *User, password string) error {
 
 func (r *UserRepositoryGorm) SignIn(username, password string) (*User, error) {
 	var user User
-
 	result := r.db.Where("username = ?", username).First(&user)
 	if result.Error != nil {
 		return nil, result.Error
@@ -48,9 +58,9 @@ func (r *UserRepositoryGorm) SignIn(username, password string) (*User, error) {
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
 	if err != nil {
-		return nil, err // Passwords do not match
+		return nil, err
 	}
-	
+
 	user.LastLogin = time.Now().Format(time.RFC3339)
 	r.db.Save(&user)
 
