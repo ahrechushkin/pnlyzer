@@ -2,10 +2,8 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/gorilla/mux"
-	"github.com/pnlyzer/handlers"
+	"pnlyzer/handlers"
 )
 
 func NewRouter() *mux.Router {

@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"pnlyzer/router"
 	"time"
-
-	"github.com/pnlyzer/router"
 )
 
 func main() {
