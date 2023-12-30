@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -20,7 +21,7 @@ func main() {
 	// Run the server in a goroutine
 	go func() {
 		log.Printf("Server is running on port %s...\n", port)
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("Error starting server: %v", err)
 		}
 	}()
